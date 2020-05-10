@@ -38,4 +38,7 @@ def template_tours(id_tour):
                            tour=content_data.tours[id_tour],
                            **params
                            )
-app.run('0.0.0.0', 8000, debug=True)
+
+if __name__ == '__main__':
+    app.run()
+# app.run('0.0.0.0', 8000, debug=True)
