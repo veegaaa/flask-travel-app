@@ -3,23 +3,35 @@ from flask import render_template
 from data import content_data
 
 app = Flask(__name__)
+params = {
+   'title': content_data.title,
+   'departures': content_data.departures,
+   'subtitle': content_data.subtitle,
+   'description': content_data.description,
+}
 
 @app.route("/")
 def template_index():
-    return render_template("index.html",
-                           title=content_data.title,
-                           departures=content_data.departures,
-                           subtitle=content_data.subtitle,
-                           description=content_data.description,
-                           tours=content_data.tours,
-                           )
+    return render_template("index.html", tours=content_data.tours, **params)
 
-@app.route("/departure/<int:num_depart>")
-def template_departure(num_depart):
-    return render_template("departure.html")
+@app.route("/departures/<string:depart>")
+def template_departure(depart):
+    tours_depart = {id:tour for id, tour in content_data.tours.items() if tour['departure'] == depart}
+    nights_max = max(tour['nights'] for tour in tours_depart.values())
+    nights_min = min(tour['nights'] for tour in tours_depart.values())
+    price_min = min(tour['price'] for tour in tours_depart.values())
+    price_max = max(tour['price'] for tour in tours_depart.values())
+    return render_template("departure.html",
+                           depart=depart,
+                           tours=tours_depart,
+                           nights_max=nights_max,
+                           nights_min=nights_min,
+                           price_min=price_min,
+                           price_max=price_max,
+                           **params)
 
 @app.route("/tours/<int:id_tour>")
 def template_tours(id_tour):
-    return render_template("tour.html")
+    return render_template("tour.html", tours=content_data.tours, **params)
 
 app.run('0.0.0.0', 8000, debug=True)
