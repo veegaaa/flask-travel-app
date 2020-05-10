@@ -12,7 +12,9 @@ params = {
 
 @app.route("/")
 def template_index():
-    return render_template("index.html", tours=content_data.tours, **params)
+    return render_template("index.html",
+                           tours={tour_id:content_data.tours[tour_id] for tour_id in range(1,7)},
+                           **params)
 
 @app.route("/departures/<string:depart>")
 def template_departure(depart):
@@ -32,6 +34,8 @@ def template_departure(depart):
 
 @app.route("/tours/<int:id_tour>")
 def template_tours(id_tour):
-    return render_template("tour.html", tours=content_data.tours, **params)
-
+    return render_template("tour.html",
+                           tour=content_data.tours[id_tour],
+                           **params
+                           )
 app.run('0.0.0.0', 8000, debug=True)
