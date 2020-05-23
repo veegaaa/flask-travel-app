@@ -1,5 +1,6 @@
-from flask import Flask
+from flask import Flask, url_for
 from flask import render_template
+
 from data import content_data
 
 app = Flask(__name__)
@@ -13,10 +14,10 @@ params = {
 @app.route("/")
 def template_index():
     return render_template("index.html",
-                           tours={tour_id:content_data.tours[tour_id] for tour_id in range(1,7)},
+                           tours={tour_id:content_data.tours[tour_id] for tour_id in range(1, 7)},
                            **params)
 
-@app.route("/departures/<string:depart>")
+@app.route("/departures/<depart>")
 def template_departure(depart):
     tours_depart = {id:tour for id, tour in content_data.tours.items() if tour['departure'] == depart}
     nights_max = max(tour['nights'] for tour in tours_depart.values())
@@ -41,4 +42,12 @@ def template_tours(id_tour):
 
 if __name__ == '__main__':
     app.run()
+
+# with app.test_request_context():
+#     print(url_for('template_departure', depart=123123))
+#     # print(url_for('login'))
+#     # print(url_for('login', next='/'))
+#     # print(url_for('profile', username='John Doe'))
+#     print("safasfasfasfasfasfsafsa")
+
 # app.run('0.0.0.0', 8000, debug=True)

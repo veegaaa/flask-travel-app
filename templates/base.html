@@ -18,7 +18,7 @@
         <ul class="navbar-nav">
           {% for depart_key, depart_val in departures.items() %}
           <li class="nav-item active">
-            <a class="nav-link" href="/departures/{{ depart_key }}">{{ depart_val }}</a>
+            <a class="nav-link" href=" {{ url_for('template_departure', depart=depart_key) }}">{{ depart_val }}</a>
           </li>
           {% endfor %}
         </ul>
